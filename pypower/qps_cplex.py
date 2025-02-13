@@ -8,8 +8,8 @@
 import re
 
 from sys import stdout, stderr
-
-from numpy import array, NaN, Inf, ones, zeros, shape, finfo, arange, r_
+from math import inf, nan
+from numpy import array, ones, zeros, shape, finfo, arange, r_
 from numpy import flatnonzero as find
 
 from scipy.sparse import csr_matrix as sparse
@@ -122,22 +122,22 @@ def qps_cplex(H, c, A, l, u, xmin, xmax, x0, opt):
     if len(c) == 0:
         c = zeros(nx)
 
-    if  len(A) > 0 and (len(l) == 0 or all(l == -Inf)) and \
-                       (len(u) == 0 or all(u ==  Inf)):
+    if  len(A) > 0 and (len(l) == 0 or all(l == -inf)) and \
+                       (len(u) == 0 or all(u ==  inf)):
         A = None                    ## no limits => no linear constraints
 
     nA = shape(A)[0]                ## number of original linear constraints
     if len(u) == 0:                 ## By default, linear inequalities are ...
-        u = Inf * ones(nA)          ## ... unbounded above and ...
+        u = inf * ones(nA)          ## ... unbounded above and ...
 
     if len(l) == 0:
-        l = -Inf * ones(nA)         ## ... unbounded below.
+        l = -inf * ones(nA)         ## ... unbounded below.
 
     if len(xmin) == 0:              ## By default, optimization variables are ...
-        xmin = -Inf * ones(nx)      ## ... unbounded below and ...
+        xmin = -inf * ones(nx)      ## ... unbounded below and ...
 
     if len(xmax) == 0:
-        xmax = Inf * ones(nx)       ## ... unbounded above.
+        xmax = inf * ones(nx)       ## ... unbounded above.
 
     if len(x0) == 0:
         x0 = zeros(nx)
@@ -231,18 +231,18 @@ def qps_cplex(H, c, A, l, u, xmin, xmax, x0, opt):
 
     ## check for empty results (in case optimization failed)
     if len(x) == 0:
-        x = NaN * zeros(nx)
+        x = nan * zeros(nx)
 
     if len(f) == 0:
-        f = NaN
+        f = nan
 
     if len(lam) == 0:
-        lam['ineqlin'] = NaN * zeros(len(bi))
-        lam['eqlin']   = NaN * zeros(len(be))
-        lam['lower']   = NaN * zeros(nx)
-        lam['upper']   = NaN * zeros(nx)
-        mu_l        = NaN * zeros(nA)
-        mu_u        = NaN * zeros(nA)
+        lam['ineqlin'] = nan * zeros(len(bi))
+        lam['eqlin']   = nan * zeros(len(be))
+        lam['lower']   = nan * zeros(nx)
+        lam['upper']   = nan * zeros(nx)
+        mu_l        = nan * zeros(nA)
+        mu_u        = nan * zeros(nA)
     else:
         mu_l        = zeros(nA)
         mu_u        = zeros(nA)
